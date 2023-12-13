@@ -21,19 +21,23 @@ export const useAuthStore = defineStore('auth', () => {
         refreshToken: null
     })
     watch(currentUser, (newCurrentUser) => {
-        const stringNewUser = JSON.stringify(newCurrentUser)
-        console.log(stringNewUser)
-        localStorage.setItem('user', stringNewUser)
+        if (currentUser.accessToken || currentUser.refreshToken) {
+            const stringNewUser = JSON.stringify(newCurrentUser)
+            console.log(stringNewUser)
+            localStorage.setItem('user', stringNewUser)
+        } else {
+            localStorage.clear()
+        }
     })
 
     async function authCheck() {
         const userFromLocalStorage = localStorage.getItem('user')
         if (userFromLocalStorage) {
             const userFromLocalStorageParsed = JSON.parse(userFromLocalStorage)
-            const response = await axios.post('http://localhost:8000/api/token/verify/', {
+            const {status} = await axios.post('http://localhost:8000/api/token/verify/', {
                 'token': userFromLocalStorageParsed.accessToken
             })
-            if (!(response.status === 401)) {
+            if (!(status === 401)) {
                 isAuthenticated.value = true
                 return true
             }
@@ -42,13 +46,13 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     async function login(username: string, password: string) {
-        const response = await axios.post('http://localhost:8000/api/token/', {
+        const {status, data} = await axios.post('http://localhost:8000/api/token/', {
             'username': username,
             'password': password
         })
-        if (response.status === 200) {
-            currentUser.accessToken = response.data.access
-            currentUser.refreshToken = response.data.refresh
+        if (status === 200) {
+            currentUser.accessToken = data.access
+            currentUser.refreshToken = data.refresh
             isAuthenticated.value = true
             console.log(isAuthenticated.value)
         }
@@ -56,13 +60,13 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     async function signUp(newUserData: INewUser) {
-        const response = await axios.post('http://localhost:8000/auth/register/', {
+        const {data} = await axios.post('http://localhost:8000/auth/register/', {
             username: newUserData.username,
             email: newUserData.email,
             password: newUserData.password,
         })
-        if (response.data.access_token) {
-            currentUser.accessToken = response.access_token
+        if (data.access_token) {
+            currentUser.accessToken = data.access_token
             isAuthenticated.value = true
         }
         return isAuthenticated.value
