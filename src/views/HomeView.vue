@@ -6,10 +6,16 @@
 <script lang="ts" setup>
 import {computed, ref} from 'vue'
 import {useAuthStore} from '@/stores/auth'
+import axios from 'axios'
 
 const authStore = useAuthStore()
 
 const dialogVisible = ref(false)
+const fetchData = async () => {
+  const {data} = await axios.get('http://localhost:8000/api/v1/articles/comments/')
+  console.log(data)
+}
+fetchData()
 
 function showDialog() {
   dialogVisible.value = true
