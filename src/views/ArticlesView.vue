@@ -12,24 +12,42 @@ import {ref} from 'vue'
 import {useAuthStore} from '@/stores/auth'
 import axios from 'axios'
 import TheHeader from '@/components/TheHeader.vue'
-import type {IArticle, IArticleResponse} from '@/views/ArticlesView.vue'
 import ArticlesList from '@/components/article/ArticleList.vue'
+
+export interface IArticle {
+  id: number,
+  article_title: string,
+  article_text: string,
+  pub_date: string
+}
+
+export interface IResponse {
+  count: number
+  next: string | null
+  previous: string | null
+}
+
+export interface IArticleResponse extends IResponse {
+  results: IArticle[]
+}
 
 
 const authStore = useAuthStore()
 const articles = ref<IArticle[]>([])
-const dialogVisible = ref(false)
 const fetchData = async () => {
-  const {data}: { data: IArticleResponse } = await axios.get('http://localhost:8000/api/v1/articles/articles/')
-  console.log(data)
-  articles.value.push(...data.results)
+  try {
+    const {data}: { data: IArticleResponse } = await axios.get('http://localhost:8000/api/v1/articles/my-articles/', {
+      headers: {
+        Authorization: `Bearer ${authStore.currentUser.accessToken}`
+      }
+    })
+    articles.value.push(...data.results)
+    console.log(data)
+  } catch (e) {
+    console.log(e)
+  }
 }
 fetchData()
-
-function showDialog() {
-  dialogVisible.value = true
-}
-
 </script>
 
 <style lang="scss">
@@ -40,34 +58,12 @@ function showDialog() {
   @include wrapper(block);
 }
 
-.articles__title {
-  @include title();
-  margin-top: 2rem;
+.list__item {
+  max-height: 30rem;
 }
 
-.articles__text {
-  margin-top: 1.5rem;
-  @include subTitle();
-}
 
 .articles__button {
-  margin-top: 1.5rem;
-}
-
-.articles__filter {
-  margin-top: 1.5rem;
-
-  .articles__filter-button_checked {
-    background-color: #008167;
-    border-color: #008167;
-  }
-}
-
-.articles__filter-button + .articles__filter-button {
-  margin-left: 1.5rem;
-}
-
-.articles__search {
   margin-top: 1.5rem;
 }
 </style>

@@ -44,8 +44,8 @@
         <router-link to="/" class="navigation__link">Главная</router-link>
       </li>
       <li class="navigation__item">
-        <router-link to="/profile" class="navigation__link"
-        >Профиль
+        <router-link to="/articles" class="navigation__link"
+        >Статьи
         </router-link
         >
       </li>

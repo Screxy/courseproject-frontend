@@ -1,4 +1,4 @@
-import {reactive, ref, watch} from 'vue'
+import {reactive, ref} from 'vue'
 import {defineStore} from 'pinia'
 import axios from 'axios'
 
@@ -20,26 +20,41 @@ export const useAuthStore = defineStore('auth', () => {
         accessToken: null,
         refreshToken: null
     })
-    watch(currentUser, (newCurrentUser) => {
-        if (currentUser.accessToken || currentUser.refreshToken) {
-            const stringNewUser = JSON.stringify(newCurrentUser)
-            console.log(stringNewUser)
-            localStorage.setItem('user', stringNewUser)
-        } else {
-            localStorage.clear()
+    const setUserToLocalStorage = () => {
+        const stringNewUser = JSON.stringify(currentUser)
+        // console.log(stringNewUser)
+        localStorage.setItem('user', stringNewUser)
+    }
+
+    const getUserFromLocalStorage = () => {
+        const userFromLocalStorage = localStorage.getItem('user')
+        if (userFromLocalStorage) {
+            console.log('getFromLS')
+            const userFromLocalStorageParsed = JSON.parse(userFromLocalStorage)
+            currentUser.accessToken = userFromLocalStorageParsed.accessToken
+            currentUser.refreshToken = userFromLocalStorageParsed.refreshToken
+            return true
         }
-    })
+        return false
+    }
+    getUserFromLocalStorage()
 
     async function authCheck() {
         const userFromLocalStorage = localStorage.getItem('user')
         if (userFromLocalStorage) {
             const userFromLocalStorageParsed = JSON.parse(userFromLocalStorage)
-            const {status} = await axios.post('http://localhost:8000/api/token/verify/', {
-                'token': userFromLocalStorageParsed.accessToken
-            })
-            if (!(status === 401)) {
-                isAuthenticated.value = true
-                return true
+            try {
+                const {status} = await axios.post('http://localhost:8000/api/token/verify/', {
+                    'token': userFromLocalStorageParsed.accessToken
+                })
+                // console.log(userFromLocalStorageParsed.accessToken)
+                if (!(status === 401)) {
+                    isAuthenticated.value = true
+                    return true
+                }
+            } catch (e) {
+                console.log(e)
+                return false
             }
         }
         return false
@@ -54,7 +69,7 @@ export const useAuthStore = defineStore('auth', () => {
             currentUser.accessToken = data.access
             currentUser.refreshToken = data.refresh
             isAuthenticated.value = true
-            console.log(isAuthenticated.value)
+            setUserToLocalStorage()
         }
         return isAuthenticated.value
     }
@@ -68,6 +83,7 @@ export const useAuthStore = defineStore('auth', () => {
         if (data.access_token) {
             currentUser.accessToken = data.access_token
             isAuthenticated.value = true
+            setUserToLocalStorage()
         }
         return isAuthenticated.value
     }
@@ -76,6 +92,7 @@ export const useAuthStore = defineStore('auth', () => {
         currentUser.accessToken = null
         currentUser.refreshToken = null
         isAuthenticated.value = false
+        localStorage.clear()
         return true
     }
 

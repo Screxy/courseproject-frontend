@@ -24,6 +24,22 @@ const router = createRouter({
             name: RouteNamesEnum.signup,
             component: () => import('../views/SignUpView.vue'),
         },
+        {
+            path: '/articles',
+            name: RouteNamesEnum.articles,
+            component: () => import('../views/ArticlesView.vue'),
+            meta: {
+                auth: true,
+            },
+        },
+        {
+            path: '/articles/:id',
+            name: RouteNamesEnum.articlesDetail,
+            component: () => import('../views/ArticlesDetailsView.vue'),
+            meta: {
+                auth: true,
+            },
+        },
     ],
 })
 router.beforeEach(async (to, from, next) => {

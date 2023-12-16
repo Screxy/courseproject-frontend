@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <div class="header__wrapper">
-      <NavBar />
+      <NavBar/>
     </div>
   </header>
 </template>
@@ -12,9 +12,13 @@ import NavBar from './NavBar.vue'
 
 <style scoped lang="scss">
 @use '@/assets/scss/mixin' as *;
+@use '@/assets/scss/variables' as *;
+
 .header {
-  margin-top: 1.5rem;
+  padding: 1.5rem 0;
+  background-color: $primary-body-bg;
 }
+
 .header__wrapper {
   @include wrapper();
 }
