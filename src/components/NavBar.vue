@@ -81,8 +81,8 @@ import {RouteNamesEnum} from '@/router/router.types'
 const store = useAuthStore()
 
 function tryLogout() {
-  const error = store.logout()
-  if (!error) router.push('/login')
+  store.logout()
+  router.push('/login')
 }
 
 const screenWidth = ref(window.innerWidth)
@@ -90,9 +90,13 @@ const burgerVisible = ref<boolean>(false)
 const desktop = ref<boolean>(false)
 
 function handleResize() {
-  screenWidth.value > 768
-      ? ((desktop.value = true), (burgerVisible.value = true))
-      : ((desktop.value = false), (burgerVisible.value = false))
+  if (screenWidth.value > 768) {
+    desktop.value = true
+    burgerVisible.value = true
+  } else {
+    desktop.value = false
+    burgerVisible.value = false
+  }
   screenWidth.value = window.innerWidth
 }
 
@@ -101,9 +105,13 @@ function toggleMenu() {
 }
 
 function isDesktop() {
-  screenWidth.value > 768
-      ? ((desktop.value = true), (burgerVisible.value = true))
-      : ((desktop.value = false), (burgerVisible.value = false))
+  if (screenWidth.value > 768) {
+    desktop.value = true
+    burgerVisible.value = true
+  } else {
+    desktop.value = false
+    burgerVisible.value = false
+  }
 }
 
 watch(screenWidth, isDesktop)
