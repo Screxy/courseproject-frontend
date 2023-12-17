@@ -4,6 +4,7 @@
     <div class="articles__wrapper">
       <ArticleDetailItem v-if="article" :article="article" :comments="comments" @submitForm="postComment"
                          :currentPage="currentPage"
+                         :totalPages="countComments"
                          @pageChanged="fetchComments"/>
     </div>
   </section>
@@ -32,6 +33,7 @@ interface ICommentsResponse extends IResponse {
 const authStore = useAuthStore()
 const article = ref<IArticle>()
 const comments = ref<IComment[]>([])
+const countComments = ref(0)
 const route = useRoute()
 const fetchArticle = async () => {
   try {
@@ -60,6 +62,7 @@ const fetchComments = async (page: number) => {
       }
     })
     comments.value = data.results
+    countComments.value = Math.ceil(data.count / 3)
     console.log(data)
   } catch (e) {
     console.log(e)
@@ -79,7 +82,7 @@ const postComment = async (comment: { text: string }) => {
       }
     })
     if (res.status === 201) {
-      comments.value.push(res.data)
+      await fetchComments(currentPage.value)
     }
   } catch (e) {
     console.log(e)

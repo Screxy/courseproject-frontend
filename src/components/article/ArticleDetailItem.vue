@@ -5,8 +5,7 @@
     <h4 class="article__subtitle">Комментарии</h4>
     <CommentForm @submit-form="postComment"/>
     <Pagination v-if="comments?.length"
-                :totalPages="comments.length"
-                :perPage="10"
+                :totalPages="totalPages"
                 :currentPage="currentPage"
                 @pageChanged="onPageChange"/>
     <ul v-if="comments?.length" class="article__comments">
@@ -25,7 +24,7 @@ import type {IComment} from '@/views/ArticlesDetailsView.vue'
 import CommentForm from '@/components/article/CommentForm.vue'
 import Pagination from '@/components/Pagination.vue'
 
-const props = defineProps<{ article: IArticle, comments?: IComment[], currentPage: number }>()
+const props = defineProps<{ article: IArticle, comments?: IComment[], currentPage: number, totalPages: number }>()
 const emit = defineEmits(['submitForm', 'pageChanged'])
 const postComment = (formData: { text: string }) => emit('submitForm', formData)
 

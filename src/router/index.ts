@@ -40,6 +40,14 @@ const router = createRouter({
                 auth: true,
             },
         },
+        {
+            path: '/shoes',
+            name: RouteNamesEnum.shoes,
+            component: () => import('../views/ShoesView.vue'),
+            meta: {
+                auth: true,
+            },
+        },
     ],
 })
 router.beforeEach(async (to, from, next) => {

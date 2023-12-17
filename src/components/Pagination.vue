@@ -31,21 +31,17 @@ const props = defineProps({
     type: Number,
     required: true
   },
-  perPage: {
-    type: Number,
-    required: true
-  },
   currentPage: {
     type: Number,
     required: true
   }
 })
 const pages = computed(() => {
-  const pages = []
+  const currentPages: number[] = []
   for (let i = 0; i < props.totalPages; i++) {
-    pages.push(i)
+    currentPages.push(i)
   }
-  return pages
+  return currentPages
 })
 const pageChanged = (val: number) => {
   emit('pageChanged', val)

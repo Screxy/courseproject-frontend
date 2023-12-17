@@ -41,19 +41,25 @@
         @click="toggleMenu"
     >
       <li class="navigation__item">
-        <router-link to="/" class="navigation__link">Главная</router-link>
+        <router-link :to={name:RouteNamesEnum.home} class="navigation__link">Главная</router-link>
       </li>
       <li class="navigation__item">
-        <router-link to="/articles" class="navigation__link"
+        <router-link :to={name:RouteNamesEnum.articles} class="navigation__link"
         >Статьи
         </router-link
         >
       </li>
-      <li class="navigation__item" v-if="!store.isAuthenticated">
-        <router-link to="/login" class="navigation__link">Войти</router-link>
+      <li class="navigation__item">
+        <router-link :to={name:RouteNamesEnum.shoes} class="navigation__link"
+        >Кроссовки
+        </router-link
+        >
       </li>
       <li class="navigation__item" v-if="!store.isAuthenticated">
-        <router-link to="/signup" class="navigation__link"
+        <router-link :to={name:RouteNamesEnum.login} class="navigation__link">Войти</router-link>
+      </li>
+      <li class="navigation__item" v-if="!store.isAuthenticated">
+        <router-link :to={name:RouteNamesEnum.signup} class="navigation__link"
         >Зарегистрироваться
         </router-link
         >
@@ -70,6 +76,7 @@ import {ref, watch, onMounted, onUnmounted} from 'vue'
 import {useAuthStore} from '@/stores/auth'
 import router from '@/router'
 import VButton from '@/components/UI/VButton.vue'
+import {RouteNamesEnum} from '@/router/router.types'
 
 const store = useAuthStore()
 

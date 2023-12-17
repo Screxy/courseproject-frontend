@@ -4,4 +4,5 @@ export enum RouteNamesEnum {
     signup = 'signup',
     articles = 'articles',
     articlesDetail = 'articlesDetail',
+    shoes = 'shoes',
 }
