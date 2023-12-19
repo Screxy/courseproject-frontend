@@ -1,10 +1,14 @@
 <template>
   <Spinner v-if="loading"/>
-  <div class="signup">
-    <h1 class="signup__title">Зарегистрироваться</h1>
-    <SignUpForm class="signup__form" @submit-form="trySignUp"/>
-    <RouterLink class="signup__link" to="/login">Есть аккаунт?</RouterLink>
-  </div>
+  <section class="signup">
+    <div class="signup__wrapper">
+      <div class="signup__card">
+        <h1 class="signup__title">Зарегистрироваться</h1>
+        <SignUpForm class="signup__form" @submit-form="trySignUp"/>
+        <RouterLink class="signup__link" to="/login">Есть аккаунт?</RouterLink>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -34,6 +38,17 @@ async function trySignUp(newUserData: INewUser) {
 @use '@/assets/scss/variables' as *;
 
 .signup {
+  height: 100vh;
+  background-color: grey;
+  display: flex;
+  align-items: center;
+}
+
+.signup__wrapper {
+  @include wrapper;
+}
+
+.signup__card {
   display: flex;
   flex-direction: column;
   border-radius: 2rem;

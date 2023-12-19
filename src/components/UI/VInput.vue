@@ -18,14 +18,16 @@
 defineOptions({
   name: 'VInput',
 })
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   placeholder: string
   modelValue: string | number
   label: string
   type?: string
   autocomplete?: string
   disabled?: boolean
-}>()
+}>(), {
+  type: 'text'
+})
 const emit = defineEmits(['update:modelValue'])
 
 function updateInput(event: any) {
