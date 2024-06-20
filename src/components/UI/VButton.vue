@@ -19,18 +19,18 @@ defineOptions({
   color: $c-primaryTextColor;
   background-color: $c-brand;
   border: 1px solid $c-brand;
-  border-radius: 30px;
+  border-radius: 1rem;
   transition: all 0.3s ease;
   @include media(min, md) {
     padding: 15px;
   }
 
   &:hover {
-    box-shadow: 0 0 0 3px #ff4800;
+    box-shadow: 0 0 0 3px $c-brand-darker;
   }
 
   &:active {
-    background-color: #00aaff;
+    background-color: $c-brand-darker;
   }
 
   &[disabled] {

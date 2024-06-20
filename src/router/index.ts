@@ -48,6 +48,11 @@ const router = createRouter({
                 auth: true,
             },
         },
+        {
+            path: '/oauth',
+            name: RouteNamesEnum.oauth,
+            component: () => import('@/views/OauthView.vue'),
+        }
     ],
 })
 router.beforeEach(async (to, from, next) => {

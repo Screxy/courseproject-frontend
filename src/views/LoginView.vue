@@ -10,17 +10,38 @@
             <RouterLink class="link-list__link" to="/signup"> Нет аккаунта?</RouterLink>
           </li>
         </ul>
+        <div id="VkIdSdkOneTap"></div>
       </div>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
+import * as VKID from '@vkid/sdk'
 import AuthForm from '@/components/auth/AuthForm.vue'
 import Spinner from '@/components/Spinner.vue'
-import {computed, ref, watch} from 'vue'
+import {onMounted, ref} from 'vue'
 import router from '@/router'
-import {useAuthStore, type INewUser} from '@/stores/auth'
+import {type INewUser, useAuthStore} from '@/stores/auth'
+import {APP_ID, REDIRECT_URL} from '@/utils/const'
+
+VKID.Config.set({
+  app: APP_ID, // Идентификатор приложения.
+  redirectUrl: REDIRECT_URL, // Адрес для перехода после авторизации.
+  state: 'mospolytech' // Произвольная строка состояния приложения.
+})
+
+const oneTap = new VKID.OneTap()
+
+onMounted(() => {
+// Получение контейнера из разметки.
+  const container = document.getElementById('VkIdSdkOneTap')
+// Проверка наличия кнопки в разметке.
+  if (container) {
+    // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
+    oneTap.render({container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS})
+  }
+})
 
 const loading = ref(false)
 const store = useAuthStore()
@@ -43,7 +64,7 @@ async function tryLogin(userData: INewUser) {
 
 .login {
   height: 100vh;
-  background-color: grey;
+  background-color: $primary-body-bg;
   display: flex;
   align-items: center;
 }

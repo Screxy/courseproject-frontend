@@ -48,11 +48,12 @@ export const useAuthStore = defineStore('auth', () => {
                     'token': userFromLocalStorageParsed.accessToken
                 })
                 // console.log(userFromLocalStorageParsed.accessToken)
-                if (!(status === 401)) {
+                if (status !== 401) {
                     isAuthenticated.value = true
                     return true
                 }
             } catch (e) {
+                localStorage.removeItem('user')
                 console.log(e)
                 return false
             }

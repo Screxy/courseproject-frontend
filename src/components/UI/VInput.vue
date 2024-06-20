@@ -47,7 +47,9 @@ function updateInput(event: any) {
 .label__input {
   font-size: 1.2rem;
   width: 100%;
-  border: 2px solid $c-brand;
+  background-color: $primary-body-bg;
+  border-radius: 1rem;
+  border: 1px solid $c-brand;
   padding: 10px 15px;
 
   &[disabled] {

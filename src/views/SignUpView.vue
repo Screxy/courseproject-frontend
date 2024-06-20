@@ -39,7 +39,7 @@ async function trySignUp(newUserData: INewUser) {
 
 .signup {
   height: 100vh;
-  background-color: grey;
+  background-color: $primary-body-bg;
   display: flex;
   align-items: center;
 }

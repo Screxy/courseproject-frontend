@@ -5,4 +5,5 @@ export enum RouteNamesEnum {
     articles = 'articles',
     articlesDetail = 'articlesDetail',
     shoes = 'shoes',
+    oauth = 'oauth',
 }
